@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import hid # pip install hidapi - Platform independant
 import astm # pip install astm
@@ -747,3 +748,16 @@ if __name__ == '__main__':
     #print binascii.hexlify( mt.getTempBasalStatus().responsePayload )
     #print binascii.hexlify( mt.getBolusesStatus().responsePayload )
     #print binascii.hexlify( mt.doRemoteBasal().responsePayload )
+
+
+epoch_time = int(time.mktime(time.strptime( status.sensorBGLTimestamp.strftime( "%c" )))) 
+#epoch_time = epoch_time - time.localtime(epoch_time).tm_isdst*3600
+
+with open('latest_sg.json','w') as text_file:
+    text_file.write('"value":"{0}","sgv":{0},"type":"sgv","dateString":"{1}","date":{2}'.format( status.sensorBGL, time.strftime("%Y-%m-%dT%H:%M:%S%z", time.localtime(epoch_time)) , epoch_time*1000 ))
+
+
+#with open('latest_sg.json','w') as text_file:
+#    text_file.write('"value":"{0}","sgv":{0},"type":"sgv","dateString":"{1}","date":{2}'.format( status.sensorBGL, time.strftime("%Y-%m-%dT%H:%M:%S%z", time.localtime(epoch_time)) , epoch_time*1000 ))
+
+
