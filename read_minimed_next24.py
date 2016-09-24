@@ -393,19 +393,19 @@ class PumpStatusResponseMessage( MedtronicReceiveMessage ):
     def trendArrow( self ):
         status = int( struct.unpack( '>B', self.responsePayload[0x40:0x41] )[0] )
         if status == 0x60:
-            return "No arrows"
+            return "Flat"
         elif status == 0xc0:
-            return "3 arrows up"
+            return "DoubleVerticalUp"
         elif status == 0xa0:
-            return "2 arrows up"
+            return "VerticalUp"
         elif status == 0x80:
-            return "1 arrow up"
+            return "FortyFiveUp"
         elif status == 0x40:
-            return "1 arrow down"
+            return "FortyFiveDown"
         elif status == 0x20:
-            return "2 arrows down"
+            return "VerticalDown"
         elif status == 0x00:
-            return "3 arrows down"
+            return "DoubleVerticalDown"
         else:
             return "Unknown trend"
 
@@ -754,8 +754,12 @@ epoch_time = int(time.mktime(time.strptime( status.sensorBGLTimestamp.strftime( 
 #epoch_time = epoch_time - time.localtime(epoch_time).tm_isdst*3600
 
 with open('latest_sg.json','w') as text_file:
-    text_file.write('"value":"{0}","sgv":{0},"type":"sgv","dateString":"{1}","date":{2}'.format( status.sensorBGL, time.strftime("%Y-%m-%dT%H:%M:%S%z", time.localtime(epoch_time)) , epoch_time*1000 ))
+    text_file.write('"value":"{0}","sgv":{0},"type":"sgv","dateString":"{1}","date":{2}'.format( status.sensorBGL, time.strftime("%Y-%m-%dT%H:%M:%S+0100", time.localtime(epoch_time)) , epoch_time*1000 ))
 
+
+#with open('openaps_sg.json','w') as text_file:
+
+#    text_file.write('"dateString":"{1}","value":"{0}","sgv":{0},"date":{2}'.format( status.sensorBGL, time.strftime("%Y-%m-%dT%H:%M:%S+0100", time.localtime(epoch_time)) , epoch_time*1000 ),'"type":"sgv"')
 
 #with open('latest_sg.json','w') as text_file:
 #    text_file.write('"value":"{0}","sgv":{0},"type":"sgv","dateString":"{1}","date":{2}'.format( status.sensorBGL, time.strftime("%Y-%m-%dT%H:%M:%S%z", time.localtime(epoch_time)) , epoch_time*1000 ))
